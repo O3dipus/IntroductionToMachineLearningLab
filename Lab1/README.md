@@ -15,8 +15,8 @@ Lab1
     |-- __init__.py
     |-- plot_metrics.py
 |-- wifi_db
-    |-- clean_dataset.py
-    |-- noisy_dataset.py
+    |-- clean_dataset.txt
+    |-- noisy_dataset.txt
 main.py
 ```
 
