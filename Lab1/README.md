@@ -5,6 +5,8 @@
 ```
 Lab1
 |-- fig
+    |-- clean
+    |-- noisy
 |-- machine_learning
     |-- __init__.py
     |-- decision_tree.py
@@ -14,6 +16,11 @@ Lab1
 |-- plot
     |-- __init__.py
     |-- plot_metrics.py
+|-- test
+    |-- test_data_file.txt
+|-- model
+    |-- <random uuid>
+    	|-- model_name.txt
 |-- wifi_db
     |-- clean_dataset.txt
     |-- noisy_dataset.txt
@@ -55,6 +62,7 @@ python main.py -h
 ```bash
 optional arguments:
   -h, --help            show this help message and exit
+  --mode MODE           1 cross validation 2 single train 3 test
   --k_fold K_FOLD       the number of k in k-fold cross validation
   --draw_confusion DRAW_CONFUSION
                         draw confusion matrix and store in folder named fig
@@ -62,8 +70,6 @@ optional arguments:
                         show accuracy of every training process
   --train_clean TRAIN_CLEAN
                         training on clean dataset or noisy dataset
-  --validation_ratio VALIDATION_RATIO
-                        the ratio of validation dataset with respect to test dataset
 ```
 
 to be more specific , if you want to train on the clean dataset and use 10-fold cross validation, the command is shown below:
@@ -73,6 +79,24 @@ python main.py  --k_fold 10 --train_clean 1 --show_training_process 1 --validati
 ```
 
 `--show_training_process` means to show accuracy of every training process and `--validation_ratio` is related to how you split the validation dataset which is used to do the pruning which is also recommended to be set 0.6.
+
+### Model
+
+During every training models are saved in the model folder with a random uuid name.
+
+```
+|-- model
+    |-- <random uuid>
+    	|-- model_name.txt
+```
+
+the format of the model name is related to local time.
+
+
+
+### Test With Your Own Dataset
+
+With `--mode 3` you can load a trained model and test dataset in the `test` folder. There must be exactly one test data file in the folder or it will end with no result.
 
 
 

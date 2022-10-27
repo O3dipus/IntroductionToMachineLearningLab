@@ -20,7 +20,7 @@ class DecisionTreeNode:
     # return :
     #       dn : node - DecisionTreeNode
     @classmethod
-    def decision_node(cls, dim, threshold, label_count):
+    def decision_node(cls, dim, threshold, label_count=None):
         dn = cls()
         dn.dim = dim
         dn.threshold = threshold
@@ -36,7 +36,7 @@ class DecisionTreeNode:
     # return :
     #       dn : node - DecisionTreeNode
     @classmethod
-    def label_node(cls, label, sample_size):
+    def label_node(cls, label, sample_size=None):
         dn = cls()
         dn.label = label
         dn.sample_size = sample_size
@@ -68,3 +68,9 @@ class DecisionTreeNode:
                 return self.right.judge(data)
         else:
             return self.label
+
+    def serialize(self):
+        if self.is_leaf:
+            return "{} {}".format(self.is_leaf, self.label)
+        else:
+            return "{} {} {}".format(self.is_leaf, self.dim, self.threshold)
