@@ -7,6 +7,7 @@ from machine_learning.decision_tree import DecisionTree
 from machine_learning.dataloader import load_dataset, get_cross_validation_dataset
 from machine_learning.metrics import recall_rate, precision_rate, F1_rate
 from plot.plot_metrics import draw_confusion_matrix
+from plot.visualization import visualize
 
 
 def k_fold_cross_validation(k_fold, clean=True,
@@ -39,6 +40,7 @@ def k_fold_cross_validation(k_fold, clean=True,
         dt = DecisionTree(train_dataset, test_dataset)
         dt.fit()
 
+        visualize(dt, i)
         acc_before_pruning = dt.validate(test_dataset)
         aver_acc_before_pruning += acc_before_pruning
         aver_recall_before_pruning += recall_rate(dt.metrics)
