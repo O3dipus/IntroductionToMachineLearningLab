@@ -34,7 +34,7 @@ def get_cross_validation_dataset(dataset, m, n, i, j):
 
 def get_division_n(dataset, div, n):
     dataset_len = dataset.shape[0] / div
-    div1 = dataset[int(n * div):int((n + 1) * dataset_len)]
+    div1 = dataset[int(n * dataset_len):int((n + 1) * dataset_len)]
     div2 = np.concatenate((dataset[:int(n * dataset_len)],
                            dataset[int((n + 1) * dataset_len):]), axis=0)
     return div1, div2

@@ -34,6 +34,7 @@ def visualize(tree, filename):
     plot_tree = PlotTree(node, (0.5, 1.0), total_width, total_depth, x_pos, y_pos)
     plot_tree.plot()
     plt.savefig(filename)
+    plt.close()
 
 
 class PlotTree:

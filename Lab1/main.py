@@ -52,7 +52,6 @@ def k_fold_cross_validation(k_fold, clean=True,
             train_dataset, test_dataset, validation_dataset = get_cross_validation_dataset(dataset,
                                                                                            outer_k, inner_k,
                                                                                            i, j)
-
             dt = DecisionTree(train_dataset, test_dataset)
             dt.fit()
 
@@ -67,6 +66,7 @@ def k_fold_cross_validation(k_fold, clean=True,
             if draw_confusion:
                 draw_confusion_matrix(dt.metrics, figname='%s Dataset(Before Pruning)' % train_label)
                 plt.savefig('./fig/confusion_matrix/%s/%s_before_pruning_iter_%d_%d' % (train_label, train_label, i, j))
+                plt.close()
 
             visualize(dt, './fig/tree_structure/%s/%s_before_pruning_iter_%d_%d.png' % (train_label, train_label, i, j))
 
@@ -92,6 +92,7 @@ def k_fold_cross_validation(k_fold, clean=True,
             if draw_confusion:
                 draw_confusion_matrix(dt.metrics, figname='%s Dataset(After Pruning)' % train_label)
                 plt.savefig('./fig/confusion_matrix/%s/%s_after_pruning_iter_%d' % (train_label, train_label, i))
+                plt.close()
 
             visualize(dt, './fig/tree_structure/%s/%s_after_pruning_iter_%d_%d.png' % (train_label, train_label, i, j))
 
