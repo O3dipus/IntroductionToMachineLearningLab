@@ -78,7 +78,7 @@ def k_fold_cross_validation(k_fold, clean=True,
 
             if draw_confusion:
                 draw_confusion_matrix(dt.metrics, figname='%s Dataset(After Pruning)' % train_label)
-                plt.savefig('./fig/%s/%s_after_pruning_iter_%d' % (train_label, train_label, i))
+                plt.savefig('./fig/confusion_matrix/%s/%s_after_pruning_iter_%d' % (train_label, train_label, i))
 
         print()
         print("Iteration %d" % i)

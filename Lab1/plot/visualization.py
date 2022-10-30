@@ -18,7 +18,7 @@ def calc_width(root):
 #       index : iteration number - int
 # return :
 #       None
-def visualize(tree, index):
+def visualize(tree, filename):
     plt.figure(dpi=1200)
     # Remove tick labels and frame
     ax_props = dict(xticks=[], yticks=[])
@@ -33,7 +33,7 @@ def visualize(tree, index):
     y_pos = 1.0
     plot_tree = PlotTree(node, (0.5, 1.0), total_width, total_depth, x_pos, y_pos)
     plot_tree.plot()
-    plt.savefig('output_plots/noisy_tree_' + str(index) + '.png')
+    plt.savefig('./fig/tree_structure/{}.png'.format(filename))
 
 
 class PlotTree:
