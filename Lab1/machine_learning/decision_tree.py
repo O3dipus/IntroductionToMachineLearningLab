@@ -157,6 +157,14 @@ class DecisionTree:
                 if acc_right >= acc:
                     node.label = node.right.label
 
+    def get_height(self):
+        return self.get_height_recursive(self.root)
+
+    def get_height_recursive(self, node):
+        if node is None:
+            return 0
+        return max(self.get_height_recursive(node.left), self.get_height_recursive(node.right))+1
+
     def save_model(self, dirname, filename):
         self.get_model(self.root, 1)
         if not os.path.exists("./model/%s" % dirname):

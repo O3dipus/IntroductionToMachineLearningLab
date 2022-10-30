@@ -1,0 +1,75 @@
+1 False 0 -55.0
+2 False 4 -59.0
+4 False 3 -55.0
+8 True 1.0
+16 True 1.0
+17 True 1.0
+34 True 1.0
+68 True 1.0
+69 True 4.0
+35 True 1.0
+9 True 3.0
+5 False 4 -56.0
+10 False 3 -58.0
+20 True 4.0
+21 True 3.0
+11 True 4.0
+3 False 0 -43.0
+6 False 3 -47.0
+12 False 4 -53.0
+24 False 4 -69.0
+48 False 3 -50.0
+96 True 3.0
+192 True 3.0
+193 True 2.0
+97 False 0 -50.0
+194 True 3.0
+195 True 2.0
+390 True 2.0
+780 True 3.0
+781 True 2.0
+391 True 2.0
+49 False 6 -76.0
+98 True 3.0
+196 True 3.0
+197 True 3.0
+394 True 2.0
+788 True 3.0
+789 True 2.0
+395 True 3.0
+99 False 1 -55.0
+198 False 2 -54.0
+396 True 2.0
+397 True 3.0
+794 True 3.0
+795 True 2.0
+199 True 3.0
+25 True 4.0
+13 False 4 -69.0
+26 True 2.0
+52 True 2.0
+104 True 3.0
+105 True 2.0
+53 True 2.0
+27 False 6 -77.0
+54 False 3 -39.0
+108 True 3.0
+216 True 3.0
+432 True 3.0
+433 True 3.0
+866 True 2.0
+1732 True 3.0
+1733 True 2.0
+867 True 3.0
+217 True 3.0
+109 True 2.0
+55 False 2 -52.0
+110 True 2.0
+111 False 0 -46.0
+222 True 3.0
+223 True 2.0
+7 False 3 -50.0
+14 False 2 -51.0
+28 True 2.0
+29 True 3.0
+15 True 2.0

@@ -26,14 +26,14 @@ def visualize(tree, filename):
 
     node = tree.root
     total_width = calc_width(node)
-    total_depth = float(tree.max_depth)
+    total_depth = float(tree.get_height())
 
     # Initial position
     x_pos = -0.5 / total_width
     y_pos = 1.0
     plot_tree = PlotTree(node, (0.5, 1.0), total_width, total_depth, x_pos, y_pos)
     plot_tree.plot()
-    plt.savefig('./fig/tree_structure/{}.png'.format(filename))
+    plt.savefig(filename)
 
 
 class PlotTree:
@@ -48,7 +48,7 @@ class PlotTree:
     def plot(self):
         width = calc_width(self.node)
         position = (self.x_pos + (1.0 + width) / (2.0 * self.total_width), self.y_pos)
-        message = 'x[' + str(self.node.dim) + '] < ' + str(self.node.value)
+        message = 'x[' + str(self.node.dim) + '] < ' + str(self.node.threshold)
         self.plot_node(message, position, self.parent_pos)
         self.y_pos -= 1.0 / self.total_depth
         left = self.node.left
@@ -56,7 +56,7 @@ class PlotTree:
         if left:
             if left.is_leaf:
                 self.x_pos += 1.0 / self.total_width
-                message = 'leaf: ' + str(left.value)
+                message = 'leaf: ' + str(left.label)
                 self.plot_node(message, (self.x_pos, self.y_pos), position)
             else:
                 self.node = left
@@ -66,7 +66,7 @@ class PlotTree:
         if right:
             if right.is_leaf:
                 self.x_pos += 1.0 / self.total_width
-                message = 'leaf: ' + str(left.value)
+                message = 'leaf: ' + str(right.label)
                 self.plot_node(message, (self.x_pos, self.y_pos), position)
             else:
                 self.node = right
