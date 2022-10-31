@@ -85,7 +85,7 @@ class PlotTree:
     #       None
     def plot_node(self, message, position, parent_position):
         visualize.ax.annotate(message, xy=(parent_position[0], parent_position[1]), xycoords='data',
-                              xytext=position, textcoords='data', va="center", ha="center", size=0.5 / self.total_depth,
-                              bbox=dict(boxstyle="round", fc='w', ec='b', lw=0.5 / self.total_depth),
-                              arrowprops=dict(arrowstyle="-", lw=0.5 / self.total_depth))
+                              xytext=position, textcoords='data', va="center", ha="center", size=30 / self.total_depth,
+                              bbox=dict(boxstyle="round", fc='w', lw=5 / self.total_depth),
+                              arrowprops=dict(arrowstyle="-", lw=7 / self.total_depth))
 

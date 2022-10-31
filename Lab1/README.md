@@ -5,8 +5,9 @@
 ```
 Lab1
 |-- fig
-    |-- clean
-    |-- noisy
+    |-- confusion_matrix
+        |-- clean
+        |-- noiy
 |-- machine_learning
     |-- __init__.py
     |-- decision_tree.py
@@ -62,23 +63,24 @@ python main.py -h
 ```bash
 optional arguments:
   -h, --help            show this help message and exit
-  --mode MODE           1 cross validation 2 single train 3 test
+  --mode MODE           1 cross validation 2 single train 3 test 4 visualize
   --k_fold K_FOLD       the number of k in k-fold cross validation
   --draw_confusion DRAW_CONFUSION
-                        draw confusion matrix and store in folder named fig
+                        1 draw confusion matrix and store in folder named fig
   --show_training_process SHOW_TRAINING_PROCESS
-                        show accuracy of every training process
+                        1 show accuracy of every training process 2 do not
+                        show
   --train_clean TRAIN_CLEAN
-                        training on clean dataset or noisy dataset
+                        1 training on clean dataset 2 noisy dataset
 ```
 
 to be more specific , if you want to train on the clean dataset and use 10-fold cross validation, the command is shown below:
 
 ```bash
-python main.py  --k_fold 10 --train_clean 1 --show_training_process 1 --validation_ratio 0.5
+python main.py  --k_fold 10 --train_clean 1 --show_training_process 1
 ```
 
-`--show_training_process` means to show accuracy of every training process and `--validation_ratio` is related to how you split the validation dataset which is used to do the pruning which is also recommended to be set 0.6.
+`--show_training_process` means to show accuracy of every training process.
 
 ### Model
 
@@ -103,7 +105,3 @@ With `--mode 3` you can load a trained model and test dataset in the `test` fold
 ### Record Confusion Matrix
 
 Using argument `--draw_confusion` it is not difficult to record confusion matrix generated during the training process and figures will be stored in the `fig` folder.
-
-One of the result is shown below. Every time you run the program with `--draw_confusion 1` will lead to an overwrite action to the previous figure so don't forget to store your necessary experiment data before starting the next training.
-
-![image-20221027010236225](C:\Users\89748\AppData\Roaming\Typora\typora-user-images\image-20221027010236225.png)

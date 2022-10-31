@@ -18,10 +18,10 @@ def k_fold_cross_validation(k_fold, clean=True,
                             show_training_process=False,
                             save_model=False):
     if clean:
-        train_label = 'Clean'
+        train_label = 'clean'
         path = 'wifi_db/clean_dataset.txt'
     else:
-        train_label = 'Noisy'
+        train_label = 'noisy'
         path = 'wifi_db/noisy_dataset.txt'
     dataset = load_dataset(path)
 
@@ -97,8 +97,6 @@ def k_fold_cross_validation(k_fold, clean=True,
                 plt.savefig('./fig/confusion_matrix/%s/%s_after_pruning_iter_%d' % (train_label, train_label, i))
                 plt.close()
 
-            # visualize(dt, './fig/tree_structure/%s/%s_after_pruning_iter_%d_%d.png' % (train_label, train_label, i, j))
-
         print()
         print("Iteration %d" % i)
 
@@ -156,6 +154,14 @@ def train(clean=True):
     print("Accuracy After Pruning : %.3f" % dt.validate(test_dataset))
 
 
+def visualize_data():
+    path = 'wifi_db/clean_dataset.txt'
+    dataset = load_dataset(path)
+    dt = DecisionTree(dataset, None)
+    dt.fit()
+    visualize(dt, "fig/clean_tree.png")
+
+
 def load_model_and_test():
     model_path = './model/2b17276f-323b-4092-8c3c-54397e443092/10_27_2022_20_38_24_0_0.txt'
     model_name = '10_27_2022_20_38_24_0_0'
@@ -176,13 +182,13 @@ def main():
     np.random.seed(42)
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--mode', type=int, help='1 cross validation 2 single train 3 test', default=1)
+    parser.add_argument('--mode', type=int, help='1 cross validation 2 single train 3 test 4 visualize', default=1)
     parser.add_argument('--k_fold', type=int, help='the number of k in k-fold cross validation', default=10)
-    parser.add_argument('--draw_confusion', type=int, help='draw confusion matrix and store in folder named fig',
+    parser.add_argument('--draw_confusion', type=int, help='1 draw confusion matrix and store in folder named fig',
                         default=1)
-    parser.add_argument('--show_training_process', type=int, help='show accuracy of every training process',
+    parser.add_argument('--show_training_process', type=int, help='1 show accuracy of every training process 2 do not show',
                         default=1)
-    parser.add_argument('--train_clean', type=int, help='training on clean dataset or noisy dataset', default=1)
+    parser.add_argument('--train_clean', type=int, help='1 training on clean dataset 2 noisy dataset', default=1)
 
     args = parser.parse_args()
 
@@ -196,6 +202,8 @@ def main():
         train(clean=(args.train_clean == 1))
     elif args.mode == 3:
         load_model_and_test()
+    elif args.mode == 4:
+        visualize_data()
 
 
 if __name__ == "__main__":
