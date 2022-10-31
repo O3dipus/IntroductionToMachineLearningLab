@@ -70,8 +70,6 @@ def k_fold_cross_validation(k_fold, clean=True,
                 plt.savefig('./fig/confusion_matrix/%s/%s_before_pruning_iter_%d_%d' % (train_label, train_label, i, j))
                 plt.close()
 
-            # visualize(dt, './fig/tree_structure/%s/%s_before_pruning_iter_%d_%d.png' % (train_label, train_label, i, j))
-
             # pruning
             dt.pruning(dt.root, validation_dataset=validation_dataset)
             acc_after_pruning = dt.validate(test_dataset)
