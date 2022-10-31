@@ -15,24 +15,25 @@ from plot.plot_metrics import draw_confusion_matrix
 
 def k_fold_cross_validation(k_fold, clean=True,
                             draw_confusion=False,
-                            show_training_process=False):
+                            show_training_process=False,
+                            save_model=False):
     if clean:
-        train_label = 'clean'
+        train_label = 'Clean'
         path = 'wifi_db/clean_dataset.txt'
     else:
-        train_label = 'noisy'
+        train_label = 'Noisy'
         path = 'wifi_db/noisy_dataset.txt'
     dataset = load_dataset(path)
 
     outer_k = k_fold
-    inner_k = k_fold
+    inner_k = k_fold - 1
 
     average_acc_before_pruning_list = []
     average_acc_after_pruning_list = []
 
     model_path = uuid.uuid4()
 
-    categories = np.unique(dataset[:, dataset[0].shape[0]-1])
+    categories = np.unique(dataset[:, dataset[0].shape[0] - 1])
     aver_confusion_mat_before_pruning = np.zeros((categories.shape[0], categories.shape[0]))
     aver_confusion_mat_after_pruning = np.zeros((categories.shape[0], categories.shape[0]))
     aver_height_before_pruning = 0
@@ -52,6 +53,7 @@ def k_fold_cross_validation(k_fold, clean=True,
             train_dataset, test_dataset, validation_dataset = get_cross_validation_dataset(dataset,
                                                                                            outer_k, inner_k,
                                                                                            i, j)
+
             dt = DecisionTree(train_dataset, test_dataset)
             dt.fit()
 
@@ -68,7 +70,7 @@ def k_fold_cross_validation(k_fold, clean=True,
                 plt.savefig('./fig/confusion_matrix/%s/%s_before_pruning_iter_%d_%d' % (train_label, train_label, i, j))
                 plt.close()
 
-            visualize(dt, './fig/tree_structure/%s/%s_before_pruning_iter_%d_%d.png' % (train_label, train_label, i, j))
+            # visualize(dt, './fig/tree_structure/%s/%s_before_pruning_iter_%d_%d.png' % (train_label, train_label, i, j))
 
             # pruning
             dt.pruning(dt.root, validation_dataset=validation_dataset)
@@ -80,8 +82,9 @@ def k_fold_cross_validation(k_fold, clean=True,
             aver_confusion_mat_after_pruning += dt.metrics
             aver_height_after_pruning += dt.get_height()
 
-            dt.save_model(dirname=model_path,
-                          filename="%s_%d_%d" % (datetime.now().strftime("%m_%d_%Y_%H_%M_%S"), i, j))
+            if save_model:
+                dt.save_model(dirname=model_path,
+                              filename="%s_%d_%d" % (datetime.now().strftime("%m_%d_%Y_%H_%M_%S"), i, j))
 
             if show_training_process:
                 print()
@@ -94,35 +97,25 @@ def k_fold_cross_validation(k_fold, clean=True,
                 plt.savefig('./fig/confusion_matrix/%s/%s_after_pruning_iter_%d' % (train_label, train_label, i))
                 plt.close()
 
-            visualize(dt, './fig/tree_structure/%s/%s_after_pruning_iter_%d_%d.png' % (train_label, train_label, i, j))
+            # visualize(dt, './fig/tree_structure/%s/%s_after_pruning_iter_%d_%d.png' % (train_label, train_label, i, j))
 
         print()
         print("Iteration %d" % i)
-        print("Average Accuracy Before Pruning : %.3f" % (aver_acc_before_pruning / k_fold))
-        print("Average Precision Rate Before Pruning : %s" % (aver_precision_before_pruning / k_fold))
-        print("Average Recall Rate Before Pruning : %s" % (aver_recall_before_pruning / k_fold))
-        print("Average F1 Rate Before Pruning : %s" % (aver_F1_before_pruning / k_fold))
 
-        print()
-
-        print("Average Accuracy After Pruning : %.3f" % (aver_acc_after_pruning / k_fold))
-        print("Average Precision Rate After Pruning : %s" % (aver_precision_after_pruning / k_fold))
-        print("Average Recall Rate After Pruning : %s" % (aver_recall_after_pruning / k_fold))
-        print("Average F1 Rate After Pruning : %s" % (aver_F1_after_pruning / k_fold))
-        print()
-
-        average_acc_before_pruning_list.append(aver_acc_before_pruning / k_fold)
-        average_acc_after_pruning_list.append(aver_acc_after_pruning / k_fold)
+        average_acc_before_pruning_list.append(aver_acc_before_pruning / inner_k)
+        average_acc_after_pruning_list.append(aver_acc_after_pruning / inner_k)
 
     plt.figure()
-    plt.title("Cross-validation Acc")
+    plt.title("{} Dataset Cross-validation Accuracy")
     plt.plot(np.arange(1, k_fold + 1), average_acc_before_pruning_list, label='before pruning')
     plt.plot(np.arange(1, k_fold + 1), average_acc_after_pruning_list, label='after pruning')
     plt.xlabel("Iteration")
     plt.ylabel("Accuracy")
     plt.legend()
-    plt.savefig("./fig/cross_validation")
+    plt.savefig("./fig/cross_validation_{}".format(train_label))
     # plt.show()
+
+    print()
 
     aver_confusion_mat_before_pruning = (aver_confusion_mat_before_pruning / (outer_k * inner_k))
     aver_confusion_mat_after_pruning = (aver_confusion_mat_after_pruning / (outer_k * inner_k))
@@ -131,19 +124,31 @@ def k_fold_cross_validation(k_fold, clean=True,
     draw_confusion_matrix(aver_confusion_mat_after_pruning, figname='Average Confusion Matrix After Pruning')
     plt.savefig('./fig/confusion_matrix/%s/%s_after_pruning_average' % (train_label, train_label))
 
+    print('Average Acc Before Pruning: {}'.format(np.mean(average_acc_before_pruning_list)))
+    print('Average Acc After Pruning: {}'.format(np.mean(average_acc_after_pruning_list)))
     print('Average Depth Before Pruning: {}'.format(aver_height_before_pruning / (outer_k * inner_k)))
     print('Average Depth After Pruning: {}'.format(aver_height_after_pruning / (outer_k * inner_k)))
+
+    print("Average Precision Rate Before Pruning : %s" % (precision_rate(aver_confusion_mat_before_pruning)))
+    print("Average Recall Rate Before Pruning : %s" % (recall_rate(aver_confusion_mat_before_pruning)))
+    print("Average F1 Rate Before Pruning : %s" % (F1_rate(aver_confusion_mat_before_pruning)))
+
+    print()
+
+    print("Average Precision Rate After Pruning : %s" % (precision_rate(aver_confusion_mat_after_pruning)))
+    print("Average Recall Rate After Pruning : %s" % (recall_rate(aver_confusion_mat_after_pruning)))
+    print("Average F1 Rate After Pruning : %s" % (F1_rate(aver_confusion_mat_after_pruning)))
 
     return aver_acc_before_pruning / k_fold, aver_acc_after_pruning / k_fold
 
 
-def train(clean):
+def train(clean=True):
     if clean:
         path = 'wifi_db/clean_dataset.txt'
     else:
         path = 'wifi_db/noisy_dataset.txt'
     dataset = load_dataset(path)
-    train_dataset, test_dataset, validation_dataset = get_cross_validation_dataset(dataset, 10, 10, 0, 0)
+    train_dataset, test_dataset, validation_dataset = get_cross_validation_dataset(dataset, 10, 9, 0, 0)
     dt = DecisionTree(train_dataset, test_dataset)
     dt.fit()
     print("Accuracy Before Pruning : %.3f" % dt.validate(test_dataset))
@@ -173,10 +178,10 @@ def main():
 
     parser.add_argument('--mode', type=int, help='1 cross validation 2 single train 3 test', default=1)
     parser.add_argument('--k_fold', type=int, help='the number of k in k-fold cross validation', default=10)
-    parser.add_argument('--draw_confusion', type=bool, help='draw confusion matrix and store in folder named fig',
-                        default=False)
+    parser.add_argument('--draw_confusion', type=int, help='draw confusion matrix and store in folder named fig',
+                        default=1)
     parser.add_argument('--show_training_process', type=int, help='show accuracy of every training process',
-                        default=True)
+                        default=1)
     parser.add_argument('--train_clean', type=int, help='training on clean dataset or noisy dataset', default=1)
 
     args = parser.parse_args()
@@ -185,7 +190,8 @@ def main():
         k_fold_cross_validation(args.k_fold,
                                 draw_confusion=args.draw_confusion,
                                 show_training_process=args.show_training_process == 1,
-                                clean=args.train_clean == 1)
+                                clean=args.train_clean == 1,
+                                save_model=False)
     elif args.mode == 2:
         train(clean=(args.train_clean == 1))
     elif args.mode == 3:

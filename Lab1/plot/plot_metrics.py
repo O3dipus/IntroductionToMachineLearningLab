@@ -12,7 +12,7 @@ def draw_confusion_matrix(confusion_matrix, figname):
     ax.matshow(confusion_matrix, cmap=plt.cm.Blues, alpha=0.8)
     for i in range(confusion_matrix.shape[0]):
         for j in range(confusion_matrix.shape[1]):
-            ax.text(x=j, y=i, s=confusion_matrix[i, j], va='center', ha='center', size='xx-large')
+            ax.text(x=j, y=i, s="%.2f" % confusion_matrix[i, j], va='center', ha='center', size='xx-large')
 
     plt.xlabel('Prediction', fontsize=15)
     plt.ylabel('Actual', fontsize=15)

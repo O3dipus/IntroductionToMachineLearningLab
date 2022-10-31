@@ -156,6 +156,8 @@ class DecisionTree:
                     node.label = node.left.label
                 if acc_right >= acc:
                     node.label = node.right.label
+                node.left = None
+                node.right = None
 
     def get_height(self):
         return self.get_height_recursive(self.root)

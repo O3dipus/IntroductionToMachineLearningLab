@@ -4,6 +4,7 @@ import numpy as np
 # load dataset
 def load_dataset(path):
     dataset = np.loadtxt(path)
+    dataset = dataset[np.random.permutation(dataset.shape[0])]
     return dataset
 
 
@@ -18,7 +19,6 @@ def load_dataset(path):
 #       test_dataset - float[][]
 #       validation_dataset - float[][]
 def get_cross_validation_dataset(dataset, m, n, i, j):
-    dataset = dataset[np.random.permutation(dataset.shape[0])]
     test_dataset, train_dataset = get_division_n(dataset, m, i)
     # test_dataset_len = dataset.shape[0] * test
     # test_dataset = dataset[int(i * test_dataset_len):int((i + 1) * test_dataset_len)]

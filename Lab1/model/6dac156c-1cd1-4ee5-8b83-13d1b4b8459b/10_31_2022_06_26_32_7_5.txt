@@ -1,0 +1,15 @@
+1 False 0 -55.0
+2 False 4 -59.0
+4 True 1.0
+5 True 4.0
+3 False 0 -44.0
+6 False 4 -69.0
+12 False 3 -49.0
+24 True 3.0
+25 True 2.0
+13 False 3 -39.0
+26 False 4 -51.0
+52 True 3.0
+53 True 4.0
+27 True 2.0
+7 True 2.0
