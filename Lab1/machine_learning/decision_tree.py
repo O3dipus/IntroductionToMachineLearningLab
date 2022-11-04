@@ -2,8 +2,6 @@ import numpy as np
 import copy
 from machine_learning.decision_tree_node import DecisionTreeNode
 from machine_learning.metrics import calculate_H
-from datetime import datetime
-import os
 
 
 class DecisionTree:
@@ -58,7 +56,7 @@ class DecisionTree:
     #       test_dataset - float[][]
     # return :
     #       accuracy - float
-    def validate(self, test_dataset):
+    def evaluate(self, test_dataset):
         # print("Test Dataset Size : (%d, %d)" % (test_dataset.shape[0], test_dataset.shape[1]))
         accuracy = 0
         self.metrics = np.zeros([self.labels.shape[0], self.labels.shape[0]])
@@ -138,15 +136,15 @@ class DecisionTree:
             return
         else:
             # get current accuracy of the validation dataset
-            acc = self.validate(validation_dataset)
+            acc = self.evaluate(validation_dataset)
 
             node.is_leaf = True
             # apply left node value
             node.label = node.left.label
-            acc_left = self.validate(validation_dataset)
+            acc_left = self.evaluate(validation_dataset)
             # apply right node value
             node.label = node.right.label
-            acc_right = self.validate(validation_dataset)
+            acc_right = self.evaluate(validation_dataset)
             if acc > max(acc_right, acc_left):
                 node.is_leaf = False
                 node.label = None
@@ -166,36 +164,6 @@ class DecisionTree:
         if node is None:
             return 0
         return max(self.get_height_recursive(node.left), self.get_height_recursive(node.right))+1
-
-    def save_model(self, dirname, filename):
-        self.get_model(self.root, 1)
-        if not os.path.exists("./model/%s" % dirname):
-            os.mkdir("./model/%s" % dirname)
-        f = open("./model/%s/%s.txt" % (dirname, filename), 'w')
-        for ind in self.model:
-            f.write("%d %s\n" % (ind, self.model[ind]))
-        f.close()
-
-    def get_model(self, node, index):
-        self.model[index] = node.serialize()
-        if node.left is not None:
-            self.get_model(node.left, index * 2)
-        if node.right is not None:
-            self.get_model(node.right, index * 2 + 1)
-
-    def load_model(self, model_path):
-        f = open(model_path)
-        lines = f.readlines()
-        tree_hash_table = {}
-        for line in lines:
-            segments = line.strip('\n').split(' ')
-            if len(segments) == 4:
-                tree_hash_table[int(segments[0])] = DecisionTreeNode.decision_node(dim=int(float(segments[2])),
-                                                                                   threshold=float(segments[3]))
-            else:
-                tree_hash_table[int(segments[0])] = DecisionTreeNode.label_node(label=int(float(segments[2])))
-
-        self.root = self.build_tree(1, tree_hash_table)
 
     def build_tree(self, index, table):
         if index not in table:
